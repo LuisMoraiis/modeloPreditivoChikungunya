@@ -1,7 +1,7 @@
 import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix 
 from sklearn.ensemble import AdaBoostClassifier
 
 def chikungunyaBinaria(chikungunya):
@@ -35,19 +35,21 @@ param_grid = {
     'learning_rate': [0.01, 0.1, 0.2],
 }
 
-grid = GridSearchCV(modelo, param_grid, cv= 3, scoring= 'accuracy')
+grid = GridSearchCV(modelo, param_grid, cv= 3, scoring= 'accuracy', n_jobs=-1)
 
 grid.fit(treino_x, treino_y)
 
-print(f"\nMelhor score: {grid.best_score_}")
-print(f"Melhores parâmetros: {grid.best_params_}")
+bestScore = grid.best_score_
+bestParams = grid.best_params_
+print('\nModelo: Adaboost')
+print(f"Melhor score: {bestScore}")
+print(f"Melhores parâmetros: {bestParams}")
 
-modelo = AdaBoostClassifier(**grid.best_params_)
+modelo = AdaBoostClassifier(**bestParams)
 
 modelo.fit(treino_x, treino_y)
 
 previsao = modelo.predict(teste_x)
 
-print('\nModelo: Adaboost')
 print('Previsão paciente com chikungunya:')
 print(classification_report(teste_y, previsao))
