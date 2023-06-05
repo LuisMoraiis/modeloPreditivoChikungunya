@@ -40,19 +40,24 @@ param_grid = {
     'colsample_bytree': [0.5, 0.7, 1],
 }
 
-grid = GridSearchCV(modelo, param_grid, cv=3, scoring='accuracy')
+grid = GridSearchCV(modelo, param_grid, cv=3, scoring='accuracy', n_jobs=-1)
 
 grid.fit(treino_x, treino_y)
 
-print(f"\nMelhor score: {grid.best_score_}")
-print(f"Melhores parâmetros: {grid.best_params_}")
+bestScore = grid.best_score_
+bestParams = grid.best_params_
 
-modelo = xgb.XGBClassifier(**grid.best_params_)
+print('\nModelo: xgboost')
+print(f"Melhor score: {bestScore}")
+print(f"Melhores parâmetros: {bestParams}")
+
+modelo = xgb.XGBClassifier(**bestParams)
 
 modelo.fit(treino_x, treino_y)
 
 previsao = modelo.predict(teste_x)
 
-print('\nModelo: xgboost')
+
 print('Previsão paciente com chikungunya:')
 print(classification_report(teste_y, previsao))
+
