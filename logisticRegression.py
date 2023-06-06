@@ -33,13 +33,13 @@ treino_x, teste_x, treino_y, teste_y = train_test_split(x, y, test_size= 0.3, ra
 logistic_regression = LogisticRegression()
 
 param_grid = {
-        'penalty': ['l1', 'l2'],
-        'solver': ['liblinear', 'saga'],
-        'C': [0.1, 1, 10],
-        'fit_intercept': [True, False],
-        'max_iter': [100, 200, 300],
-        'class_weight': [None, 'balanced']
-    }
+    'penalty': ['l1', 'l2'],
+    'solver': ['liblinear', 'saga'],
+    'C': [0.1, 1, 10],
+    'fit_intercept': [True, False],
+    'max_iter': [100, 200, 300],
+    'class_weight': [None, 'balanced']
+}
 
 grid = GridSearchCV(logistic_regression, param_grid, cv= 5, scoring= 'accuracy', n_jobs= -1)
 grid.fit(treino_x, treino_y)
