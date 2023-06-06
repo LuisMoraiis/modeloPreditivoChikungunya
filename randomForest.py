@@ -1,7 +1,7 @@
 import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, confusion_matrix
 
 def chikungunyaBinaria(chykungunya):
@@ -28,7 +28,24 @@ x, y = RandomUnderSampler(random_state= 42).fit_resample(x, y)
 
 treino_x, teste_x, treino_y, teste_y = train_test_split(x, y, test_size= 0.3, random_state= 42)
 
-modelo = RandomForestClassifier(n_estimators= 100, max_depth= None, random_state= 42)
+randomForest = RandomForestClassifier(random_state= 42)
+
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [None, 5, 10, 15],
+}
+
+grid = GridSearchCV(randomForest, param_grid, cv= 5, n_jobs= -1)
+grid.fit(treino_x, treino_y)
+
+bestScore = grid.best_score_
+bestParams = grid.best_params_
+
+print('\nModelo: Random Forest')
+print(f"Melhor score: {bestScore}")
+print(f"Melhores parâmetros: {bestParams}")
+
+modelo = RandomForestClassifier(**bestParams)
 
 modelo.fit(treino_x, treino_y)
 
